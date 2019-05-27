@@ -38,6 +38,7 @@ public class WwizardStaffChargeParticles : MonoBehaviour
 
         if (endPoint != null)
         {
+			gameObject.GetComponent<AudioSource> ().PlayOneShot ((AudioClip)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Audio Assets/SFX/Wwizard/BAS_rune_charge_end_01.wav", typeof(AudioClip)));
             // HINT: Wizard staff charge particles appear, you may want to play the appropiate sound effect here
             chargeRoutine = AnimatePoints();
             StartCoroutine(chargeRoutine);
@@ -75,6 +76,8 @@ public class WwizardStaffChargeParticles : MonoBehaviour
 
     void OnDisable()
     {
+		
+		gameObject.GetComponent<AudioSource> ().PlayOneShot ((AudioClip)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Audio Assets/SFX/Wwizard/BAS_rune_charge_end_02.wav", typeof(AudioClip)));
         // HINT: Wizard staff charge particles disappear, you may want to play the appropiate sound effect here
         StopCoroutine(chargeRoutine);
         if (lineRenderer != null)
