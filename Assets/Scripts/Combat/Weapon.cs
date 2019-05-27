@@ -58,6 +58,9 @@ public class Weapon : MonoBehaviour, IInteractable
     public bool applyBonusDamage = false;
     #endregion
 
+    // Sandra
+    private AudioClip combo1Sound;
+
     public void EnableHitbox()
     {
         //Reset list of already hit GameObjects (since this is a new swing)
@@ -104,6 +107,9 @@ public class Weapon : MonoBehaviour, IInteractable
         {
             Physics.IgnoreCollision(hitbox, PlayerManager.Instance.playerCollider);
         }
+
+        // Sandra
+        //combo1Sound = Resources.Load("Audio Assets/SFX/Character/Weapons")
     }
 
     public void EquipWeapon()
@@ -166,7 +172,7 @@ public class Weapon : MonoBehaviour, IInteractable
                 if (currentAnimation.IsName("Player_RightSwing"))
                 {
                     attack.swingType = SwingTypes.Right;
-                    // HINT: Weapon combo state 1, you may want to take this into account when playing the weapon swing sound
+                    // HINT: Weapon combo state 1, you may want to take this into account when playing the weapon swing sound                   
                 }
                 else if (currentAnimation.IsName("Player_LeftSwing"))
                 {
@@ -226,6 +232,7 @@ public class Weapon : MonoBehaviour, IInteractable
                 Attack attack = new Attack(BaseDamage, col.contacts[0].point - PlayerManager.Instance.player.transform.position, BaseDamage);
                 GameManager.DamageObject(col.gameObject, attack);
                 // HINT: Play weapon impact event here, weapon type = transform.parent.gameObject
+                
             }
         }
     }

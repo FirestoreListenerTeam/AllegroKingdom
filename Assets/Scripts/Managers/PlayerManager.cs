@@ -51,6 +51,9 @@ public class PlayerManager : Singleton<PlayerManager>
     public Camera TotallyNotZeldaPickupCam;
     public GameObject GraveStone;
 
+    // Sandra
+    public AudioSource playerAudioSource;
+
     [HideInInspector]
     public PlayerMovement motor;
     [HideInInspector]
@@ -170,6 +173,9 @@ public class PlayerManager : Singleton<PlayerManager>
         attackSystem = player.GetComponent<PlayerAttack>();
         playerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         playerAnimator = player.GetComponent<Animator>();
+
+        // Sandra
+        playerAudioSource = player.GetComponent<AudioSource>();
 
         if (weaponSlot == null)
         {
