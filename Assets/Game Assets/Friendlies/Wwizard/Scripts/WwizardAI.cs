@@ -56,6 +56,10 @@ public class WwizardAI : Creature
         if (Gimmick1PoofParticles != null && Gimmick1PoofTransform != null)
         {
             GameObject p = Instantiate(Gimmick1PoofParticles, Gimmick1PoofTransform.transform.position + Gimmick1Displacement, Quaternion.identity) as GameObject;
+            AudioClip tmp_clip = (AudioClip)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Audio Assets/SFX/Wwizard/BAS_Wizard_Poof_02.wav", typeof(AudioClip));
+
+            gameObject.GetComponent<AudioSource>().PlayOneShot(tmp_clip);
+
             // HINT: You might want to play the Poof gimmick sound here
             Destroy(p, 5f);
         }
@@ -96,6 +100,8 @@ public class WwizardAI : Creature
     {
         matChecker.CheckMaterial(gameObject);
         // HINT: You might want to play the staff ground hit here
+
+		gameObject.GetComponent<AudioSource>().PlayOneShot(((AudioClip)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Audio Assets/SFX/Wwizard/BAS_rune_charge_end_01.wav", typeof(AudioClip))));
     }
 }
 
