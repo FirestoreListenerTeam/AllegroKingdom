@@ -24,11 +24,17 @@ public class WorldTeleporter : MonoBehaviour
     public GameObject teleportParticles;
     public UnityEvent OnTeleport;
 
+    private AudioClip teleportSFX;
+    private AudioSource audioSource;
+
     private UnityAction<int> teleport;
 
     private void Awake()
     {
         LanguageManager.OnLanguageChange += ConfigureTeleportLocations;
+
+        audioSource = PlayerManager.Instance.player.GetComponent<AudioSource>();
+        teleportSFX = (AudioClip)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Audio Assets/SFX/Interface/BAS_Button_Teleport.wav", typeof(AudioClip));
     }
 
     private void OnDestroy()
@@ -76,6 +82,9 @@ public class WorldTeleporter : MonoBehaviour
         {
             PlayerManager.Instance.player.transform.position = destinations[dropdown.value - 1].transform.position;
             // HINT: You may want to play the teleport sound effect here
+           
+            audioSource.PlayOneShot(teleportSFX);
+
             dropdown.value = 0;
             dropdown.captionText.text = LanguageManager.GetText("menu_teleport");
 
