@@ -16,8 +16,7 @@ public class SoundContainer : System.Object
 
 	public void Start()
 	{
-		int randomWaterDrop = Random.Range(0, waterDropsList.Count);
-		audioSource.PlayOneShot(waterDropsList [randomWaterDrop]);
+		PlayRandomSoundOnce();
 		timeElapsed = Random.Range(minRangeTime, maxRangeTime);
 	}
 
@@ -25,13 +24,18 @@ public class SoundContainer : System.Object
 	{
 		if (!audioSource.isPlaying && timer >= timeElapsed) 
 		{
-			int randomWaterDrop = Random.Range(0, waterDropsList.Count);
-			audioSource.PlayOneShot(waterDropsList [randomWaterDrop]);
+			PlayRandomSoundOnce();
 			float tmp = timer - timeElapsed;
 			timer = 0.0f + tmp;
 			timeElapsed = Random.Range(minRangeTime, maxRangeTime);
 		}
 		else
 			timer += Time.deltaTime;
+	}
+
+	public void PlayRandomSoundOnce()
+	{
+		int randomWaterDrop = Random.Range(0, waterDropsList.Count);
+		audioSource.PlayOneShot(waterDropsList [randomWaterDrop]);
 	}
 }
