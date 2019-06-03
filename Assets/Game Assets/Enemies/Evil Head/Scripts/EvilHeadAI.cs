@@ -7,6 +7,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class EvilHeadAI : Creature
 {
@@ -25,6 +26,19 @@ public class EvilHeadAI : Creature
     //Cached Animator hashes
     private readonly int spawnHash = Animator.StringToHash("Spawn");
     private readonly int deathHash = Animator.StringToHash("Death");
+
+    // Sandra
+    private AudioSource audioSource;
+
+    private const uint numAudios = 3;
+
+    private AudioClip[] biteSound;
+    private AudioClip[] chargeSound;
+    private AudioClip chargeBiteSound;
+    private AudioClip[] deathSound;
+    private AudioClip[] deathVoxSound;
+    private AudioClip hoverLPSound;
+    private AudioClip[] hurtSound;
     #endregion
 
     private void SetMovementSpeed(float speed) {
@@ -37,12 +51,91 @@ public class EvilHeadAI : Creature
         {
             anim = GetComponent<Animator>();
         }
+
+        // Sandra
+        audioSource = GetComponent<AudioSource>();
+
+        string basePath = "Assets/Audio Assets/SFX/Creatures/";
+        string name = "BAS_Evil_Head_";
+        string extension = ".wav";
+        string number = "_0";
+
+        string type = null;
+        string path = null;
+
+        biteSound = new AudioClip[numAudios];
+        type = "Bite";
+        for (uint i = 0; i < numAudios; ++i)
+        {
+            path = basePath + name + type + number + (i + 1) + extension;
+            biteSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (biteSound[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+        }
+
+        chargeSound = new AudioClip[numAudios + 1];
+        type = "Charge";
+
+        path = basePath + name + type + extension;
+        chargeSound[0] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (chargeSound[0] == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        for (uint i = 1; i < numAudios; ++i)
+        {
+            path = basePath + name + type + number + i + extension;
+            chargeSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (chargeSound[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+        }
+
+        path = basePath + name + type + "_Bite" + extension;
+        chargeBiteSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (chargeBiteSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        deathSound = new AudioClip[numAudios];
+        type = "Death";
+        for (uint i = 0; i < numAudios; ++i)
+        {
+            path = basePath + name + type + number + (i + 1) + extension;
+            deathSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (deathSound[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+        }
+
+        deathVoxSound = new AudioClip[numAudios];
+        type = "Death_Vox";
+        for (uint i = 0; i < numAudios; ++i)
+        {
+            path = basePath + name + type + number + (i + 1) + extension;
+            deathVoxSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (deathVoxSound[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+        }
+
+        path = basePath + name + "Hover_LP" + extension;
+        hoverLPSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (hoverLPSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        hurtSound = new AudioClip[numAudios];
+        type = "Hurt";
+        for (uint i = 0; i < numAudios; ++i)
+        {
+            path = basePath + name + type + number + (i + 1) + extension;
+            hurtSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (hurtSound[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+        }
     }
 
     public override void Start(){
 		base.Start();
         // HINT: Hover sound start here
-	}
+        audioSource.clip = hoverLPSound;
+        audioSource.Play();
+    }
 
     public override void OnSpotting()
     {
@@ -73,6 +166,8 @@ public class EvilHeadAI : Creature
         targetLocation = targetOfNPC.transform.position + Vector3.up;
         StartCoroutine(RotateTowardsTarget(targetLocation, 1f));
         // HINT: The head is sending a telegraph attack, this might need a sound effect
+        int randomNumber = Random.Range(0, (int)numAudios);
+        audioSource.PlayOneShot(chargeSound[randomNumber]);
     }
 
 
@@ -113,6 +208,7 @@ public class EvilHeadAI : Creature
     {
         //print(Time.realtimeSinceStartup + ": ChargeTowardsPlayer");
         // HINT: Charge started, a telegrpah sound could be useful here
+        audioSource.PlayOneShot(chargeBiteSound);
 
         Vector3 currentPosition = transform.position;
         Vector3 destination = targetLocation + ((targetLocation) - currentPosition).normalized * 2f;
@@ -159,6 +255,7 @@ public class EvilHeadAI : Creature
         SetMovementSpeed(0f);
         //print(Time.realtimeSinceStartup + ": Explode");
         // HiNT: We should stop hover sound at this point
+        audioSource.Stop();
 
         GameObject fx = (GameObject)Instantiate(deathFX, transform.position, Quaternion.identity);
         Destroy(fx, 5f);
@@ -184,5 +281,7 @@ public class EvilHeadAI : Creature
     public void PlayBiteSound()
     {
         // HINT: Looks like a good place to play the bite sound
+        int randomNumber = Random.Range(0, (int)numAudios);
+        audioSource.PlayOneShot(biteSound[randomNumber]);
     }
 }

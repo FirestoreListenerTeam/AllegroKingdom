@@ -15,7 +15,6 @@ public class PlayerFoot : MonoBehaviour
 
     #region private variables
     private bool inWater;
-    #endregion
 
     // Sandra
     private const uint numAudios = 6;
@@ -48,6 +47,7 @@ public class PlayerFoot : MonoBehaviour
     /// WOOD
     private AudioClip[] woodRunSound;
     private AudioClip[] woodWalkSound;
+    #endregion
 
     private void Awake()
     {
