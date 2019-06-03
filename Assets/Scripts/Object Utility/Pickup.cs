@@ -7,6 +7,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class Pickup : MonoBehaviour, IInteractable
 {
@@ -26,27 +27,154 @@ public class Pickup : MonoBehaviour, IInteractable
 	[HideInInspector]
 	public SphereCollider trigger;
 
-	#region private variables
-	private float randomOffset;
+    // Sandra
+    public enum PickupType
+    {
+        Generic,
+        Book,
+        Crystals,
+        EvilEssence,
+        Key,
+        Mushroom,
+        Pinecone,
+        Axe,
+        Dagger,
+        Hammer,
+        Pickaxe,
+        Sword
+    }
+    public PickupType pickupType;
+
+    #region private variables
+    private float randomOffset;
 	private bool playerInTrigger;
 	private GameObject outline;
 	private bool inConversation = false;
 	private bool isFocus = false;
 	private ObjectOutline objectOutline;
-	#endregion
 
-	//Events
-	public UnityEvent OnBecameFocus;
+    // Sandra
+    private AudioSource audioSource;
+
+    private const uint numAudios = 3;
+
+    private AudioClip pickupGenericSound;
+    private AudioClip pickupBookSound;
+    private AudioClip[] pickupCrystalsSounds;
+    private AudioClip pickupEvilEssenceSound;
+    private AudioClip pickupKeySound;
+    private AudioClip pickupMushroomSound;
+    private AudioClip pickupPineConeSound;
+    private AudioClip pickupAxeSound;
+    private AudioClip pickupDaggerSound;
+    private AudioClip pickupHammerSound;
+    private AudioClip pickupPickaxeSound;
+    private AudioClip pickupSwordSound;
+    #endregion
+
+    //Events
+    public UnityEvent OnBecameFocus;
 	public UnityEvent OnInteraction;
 
-	void Start()
+    private void Awake()
+    {
+        // Sandra
+        audioSource = GetComponent<AudioSource>();
+
+        string basePath = "Assets/Audio Assets/SFX/Objects/Pickups/";
+        string name = "BAS_Pickup_";
+        string extension = ".wav";
+        string number = "_0";
+
+        string path = null;
+
+        /// Generic
+        path = basePath + name + "Generic" + number + "5" + extension;
+        pickupGenericSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupGenericSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Book
+        path = basePath + name + "Book" + number + "1" + extension;
+        pickupBookSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupBookSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Crystals
+        pickupCrystalsSounds = new AudioClip[numAudios];
+        for (uint i = 0; i < numAudios; ++i)
+        {
+            path = basePath + name + "Crystals" + number + (i + 1) + extension;
+            pickupCrystalsSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (pickupCrystalsSounds[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+        }
+
+        /// Evil essence
+        path = basePath + name + "EvilEssence" + extension;
+        pickupEvilEssenceSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupEvilEssenceSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Key
+        path = basePath + name + "Key" + number + "1" + extension;
+        pickupKeySound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupKeySound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Mushroom
+        path = basePath + name + "Mushroom" + number + "1" + extension;
+        pickupMushroomSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupMushroomSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Pine cone
+        path = basePath + name + "PineCone" + number + "1" + extension;
+        pickupPineConeSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupPineConeSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Axe
+        path = basePath + name + "WeaponType_" + "Axe" + number + "1" + extension;
+        pickupAxeSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupAxeSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Dagger
+        path = basePath + name + "WeaponType_" + "Dagger" + extension;
+        pickupDaggerSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupDaggerSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Hammer
+        path = basePath + name + "WeaponType_" + "Hammer" + number + "1" + extension;
+        pickupHammerSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupHammerSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Pickaxe
+        path = basePath + name + "WeaponType_" + "Pickaxe" + number + "1" + extension;
+        pickupPickaxeSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupPickaxeSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Sword
+        path = basePath + name + "WeaponType_" + "Sword" + number + "1" + extension;
+        pickupSwordSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (pickupSwordSound == null)
+            Debug.LogError("Invalid audio clip path: " + path);
+    }
+
+    void Start()
 	{
 		randomOffset = Random.Range(0, 2 * Mathf.PI);
 	}
 
 	void OnEnable()
 	{
-       // HINT: Good place to save the pickup type
+        // HINT: Good place to save the pickup type
+        // Done in the Inspector
+
         if (transform.childCount > 0)
 		{
 			Transform T = transform.Find("Outline");
@@ -186,7 +314,59 @@ public class Pickup : MonoBehaviour, IInteractable
 
 			if (interactionSound)
 			{
-				// HINT: Play the sound for this pickup
+                // HINT: Play the sound for this pickup
+                switch (pickupType)
+                {
+                    case PickupType.Book:
+                        audioSource.PlayOneShot(pickupBookSound);
+                        break;
+
+                    case PickupType.Crystals:
+                        int randomNumber = Random.Range(0, (int)numAudios);
+                        audioSource.PlayOneShot(pickupCrystalsSounds[randomNumber]);
+                        break;
+
+                    case PickupType.EvilEssence:
+                        audioSource.PlayOneShot(pickupEvilEssenceSound);
+                        break;
+
+                    case PickupType.Key:
+                        audioSource.PlayOneShot(pickupKeySound);
+                        break;
+
+                    case PickupType.Mushroom:
+                        audioSource.PlayOneShot(pickupMushroomSound);
+                        break;
+
+                    case PickupType.Pinecone:
+                        audioSource.PlayOneShot(pickupPineConeSound);
+                        break;
+
+                    case PickupType.Axe:
+                        audioSource.PlayOneShot(pickupAxeSound);
+                        break;
+
+                    case PickupType.Dagger:
+                        audioSource.PlayOneShot(pickupDaggerSound);
+                        break;
+
+                    case PickupType.Hammer:
+                        audioSource.PlayOneShot(pickupHammerSound);
+                        break;
+
+                    case PickupType.Pickaxe:
+                        audioSource.PlayOneShot(pickupPickaxeSound);
+                        break;
+
+                    case PickupType.Sword:
+                        audioSource.PlayOneShot(pickupSwordSound);
+                        break;
+
+                    case PickupType.Generic:
+                    default:
+                        audioSource.PlayOneShot(pickupGenericSound);
+                        break;
+                }
 			}
 			if (pickupParticles != null)
 			{
@@ -261,3 +441,4 @@ public class Pickup : MonoBehaviour, IInteractable
 	}
 
 }
+ 
