@@ -36,13 +36,8 @@ public class EvilSpitPlantProjectile : MonoBehaviour
 
     private const uint numAudios = 3;
 
-    private AudioClip[] chargeSound;
-    private AudioClip[] deathSound;
-    private AudioClip[] deathHeadfallSound;
-    private AudioClip[] hurtSound;
     private AudioClip[] hurtImpactSound;
     private AudioClip[] impactPlayerSound;
-    private AudioClip[] shootSound;
     private AudioClip shootLPSound;
     #endregion
 
@@ -58,46 +53,6 @@ public class EvilSpitPlantProjectile : MonoBehaviour
 
         string type = null;
         string path = null;
-
-        chargeSound = new AudioClip[numAudios];
-        type = "Charge";
-        for (uint i = 0; i < numAudios; ++i)
-        {
-            path = basePath + name + type + number + (i + 1) + extension;
-            chargeSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (chargeSound[i] == null)
-                Debug.LogError("Invalid audio clip path: " + path);
-        }
-
-        deathSound = new AudioClip[numAudios];
-        type = "Death";
-        for (uint i = 0; i < numAudios; ++i)
-        {
-            path = basePath + name + type + number + (i + 4) + extension;
-            deathSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (deathSound[i] == null)
-                Debug.LogError("Invalid audio clip path: " + path);
-        }
-
-        deathHeadfallSound = new AudioClip[numAudios];
-        type = "Death_Headfall";
-        for (uint i = 0; i < numAudios; ++i)
-        {
-            path = basePath + name + type + number + (i + 1) + extension;
-            deathHeadfallSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (deathHeadfallSound[i] == null)
-                Debug.LogError("Invalid audio clip path: " + path);
-        }
-
-        hurtSound = new AudioClip[numAudios * 2];
-        type = "Hurt";
-        for (uint i = 0; i < numAudios; ++i)
-        {
-            path = basePath + name + type + number + (i + 1) + extension;
-            hurtSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (hurtSound[i] == null)
-                Debug.LogError("Invalid audio clip path: " + path);
-        }
 
         hurtImpactSound = new AudioClip[numAudios];
         type = "HurtImpact";
@@ -116,16 +71,6 @@ public class EvilSpitPlantProjectile : MonoBehaviour
             path = basePath + name + type + number + (i + 1) + extension;
             impactPlayerSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
             if (impactPlayerSound[i] == null)
-                Debug.LogError("Invalid audio clip path: " + path);
-        }
-
-        shootSound = new AudioClip[numAudios];
-        type = "Shoot";
-        for (uint i = 0; i < numAudios; ++i)
-        {
-            path = basePath + name + type + number + (i + 1) + extension;
-            shootSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (shootSound[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
@@ -152,6 +97,9 @@ public class EvilSpitPlantProjectile : MonoBehaviour
     IEnumerator MoveSpitBullet()
     {
         // HINT: Spit bullet started moving, you might want to start playing its continuous sound here
+        audioSource.clip = shootLPSound;
+        audioSource.Play();
+
         while (time < duration)
         {
             rb.velocity = transform.forward * speed;
@@ -224,6 +172,7 @@ public class EvilSpitPlantProjectile : MonoBehaviour
             isExploding = true;
 
             // HINT: Spit bullet stopped, you might want to stop playing its continuous sound here
+            audioSource.Stop();
 
             GetComponent<Collider>().enabled = false;
             time = duration;
@@ -235,10 +184,14 @@ public class EvilSpitPlantProjectile : MonoBehaviour
             if (hitSomething)
             {
                 // HINT: Explosion did hit something, you may want to play the explosion hit sound here
+                int randomNumber = Random.Range(0, (int)numAudios);
+                audioSource.PlayOneShot(hurtImpactSound[randomNumber]);
             }
             else
             {
                 // HINT: Explosion didn't hit something, you may want to play the explosion miss sound here
+                int randomNumber = Random.Range(0, (int)numAudios);
+                audioSource.PlayOneShot(impactPlayerSound[randomNumber]);
             }
 
             Destroy(go, 5f);

@@ -32,13 +32,14 @@ public class EvilHeadAI : Creature
 
     private const uint numAudios = 3;
 
-    private AudioClip[] biteSound;
-    private AudioClip[] chargeSound;
+    private AudioClip[] biteSounds;
+    private AudioClip chargeSound;
+    private AudioClip[] chargeSounds;
     private AudioClip chargeBiteSound;
-    private AudioClip[] deathSound;
-    private AudioClip[] deathVoxSound;
+    private AudioClip[] deathSounds;
+    private AudioClip[] deathVoxSounds;
     private AudioClip hoverLPSound;
-    private AudioClip[] hurtSound;
+    private AudioClip[] hurtSounds;
     #endregion
 
     private void SetMovementSpeed(float speed) {
@@ -63,29 +64,29 @@ public class EvilHeadAI : Creature
         string type = null;
         string path = null;
 
-        biteSound = new AudioClip[numAudios];
+        biteSounds = new AudioClip[numAudios];
         type = "Bite";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            biteSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (biteSound[i] == null)
+            biteSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (biteSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
-        chargeSound = new AudioClip[numAudios + 1];
+        chargeSounds = new AudioClip[numAudios];
         type = "Charge";
 
         path = basePath + name + type + extension;
-        chargeSound[0] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-        if (chargeSound[0] == null)
+        chargeSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        if (chargeSound == null)
             Debug.LogError("Invalid audio clip path: " + path);
 
-        for (uint i = 1; i < numAudios; ++i)
+        for (uint i = 0; i < numAudios; ++i)
         {
-            path = basePath + name + type + number + i + extension;
-            chargeSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (chargeSound[i] == null)
+            path = basePath + name + type + number + (i + 1) + extension;
+            chargeSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (chargeSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
@@ -94,23 +95,23 @@ public class EvilHeadAI : Creature
         if (chargeBiteSound == null)
             Debug.LogError("Invalid audio clip path: " + path);
 
-        deathSound = new AudioClip[numAudios];
+        deathSounds = new AudioClip[numAudios];
         type = "Death";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            deathSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (deathSound[i] == null)
+            deathSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (deathSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
-        deathVoxSound = new AudioClip[numAudios];
+        deathVoxSounds = new AudioClip[numAudios];
         type = "Death_Vox";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            deathVoxSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (deathVoxSound[i] == null)
+            deathVoxSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (deathVoxSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
@@ -119,13 +120,13 @@ public class EvilHeadAI : Creature
         if (hoverLPSound == null)
             Debug.LogError("Invalid audio clip path: " + path);
 
-        hurtSound = new AudioClip[numAudios];
+        hurtSounds = new AudioClip[numAudios];
         type = "Hurt";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            hurtSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (hurtSound[i] == null)
+            hurtSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (hurtSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
     }
@@ -165,9 +166,9 @@ public class EvilHeadAI : Creature
         thisNavMeshAgent.destination = transform.position;
         targetLocation = targetOfNPC.transform.position + Vector3.up;
         StartCoroutine(RotateTowardsTarget(targetLocation, 1f));
+
         // HINT: The head is sending a telegraph attack, this might need a sound effect
-        int randomNumber = Random.Range(0, (int)numAudios);
-        audioSource.PlayOneShot(chargeSound[randomNumber]);
+        audioSource.PlayOneShot(chargeSound);
     }
 
 
@@ -282,6 +283,6 @@ public class EvilHeadAI : Creature
     {
         // HINT: Looks like a good place to play the bite sound
         int randomNumber = Random.Range(0, (int)numAudios);
-        audioSource.PlayOneShot(biteSound[randomNumber]);
+        audioSource.PlayOneShot(biteSounds[randomNumber]);
     }
 }
