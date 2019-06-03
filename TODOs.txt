@@ -1,8 +1,9 @@
 Víctor done:
 
 - TP
-- Waterfall + waterdrop
+- Waterfall + waterdrop (need to add prefab)
 - River
+- Windmill
 
 Guillem done:
 - 1.1.1
