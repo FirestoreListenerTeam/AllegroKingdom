@@ -36,6 +36,6 @@ public class SoundContainer : System.Object
 	public void PlayRandomSoundOnce()
 	{
 		int randomWaterDrop = Random.Range(0, waterDropsList.Count);
-		audioSource.PlayOneShot(waterDropsList [randomWaterDrop]);
+		audioSource.PlayOneShot(waterDropsList[randomWaterDrop]);
 	}
 }
