@@ -10,3 +10,11 @@ Guillem done:
 - 1.2.1
 - 1.3.1
 - 2.4
+
+Guillermo done:
+
+- All main menu UI sound fx
+- Main scene UI Sound
+	- Inventory
+	- Quest
+	- Event functions
