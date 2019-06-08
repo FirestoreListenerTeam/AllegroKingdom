@@ -39,6 +39,8 @@ public class CoinPickup : MonoBehaviour {
     void Start(){
         if (playSpawnSoundAtSpawn){
             // HINT: You might want to play the Coin pickup sound here
+
+            // Sandra
             int randomNumber = Random.Range(0, (int)numAudios);
             audioSource.PlayOneShot(pickupCoinSounds[randomNumber]);
         }

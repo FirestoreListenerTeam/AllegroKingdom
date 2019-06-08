@@ -7,6 +7,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 
 public class DefaultSpellcraft : MonoBehaviour
 {
@@ -49,6 +50,15 @@ public class DefaultSpellcraft : MonoBehaviour
     private readonly int shootMagicHash = Animator.StringToHash("ShootMagic");
     private readonly int chargeMagicHash = Animator.StringToHash("ChargeMagic");
     private readonly int chargingMagicHash = Animator.StringToHash("ChargingMagic");
+
+    // Sandra
+    private AudioSource audioSource;
+
+    private const uint numAudios = 3;
+
+    private AudioClip pickupGenericSound;
+    private AudioClip pickupBookSound;
+    private AudioClip[] pickupCrystalsSounds;
     #endregion
 
     public void EnableMagic()

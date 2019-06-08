@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class Weapon : MonoBehaviour, IInteractable
 {
@@ -59,7 +60,29 @@ public class Weapon : MonoBehaviour, IInteractable
     #endregion
 
     // Sandra
-    private AudioClip combo1Sound;
+    private AudioSource audioSource;
+
+    private const uint numAudios = 3;
+
+    /// Axe
+    private AudioClip impAxeDirtSound;
+    private AudioClip impAxeGrassSound;
+    private AudioClip impAxeLeavesSound;
+    private AudioClip impAxeStoneSound;
+
+    /// Dagger
+    private AudioClip impDaggerDirtSound;
+    private AudioClip impDaggerGrassSound;
+    private AudioClip impDaggerLeavesSound;
+    private AudioClip impDaggerStoneSound;
+    private AudioClip impDaggerWoodSound;
+
+    /// Sword
+    private AudioClip impSwordDirtSound;
+    private AudioClip impSwordGrassSound;
+    private AudioClip impSwordLeavesSound;
+    private AudioClip impSwordStoneSound;
+    private AudioClip impSwordWoodSound;
 
     public void EnableHitbox()
     {
@@ -96,6 +119,65 @@ public class Weapon : MonoBehaviour, IInteractable
         }
     }
 
+    private void Awake()
+    {
+        // Sandra
+        audioSource = GetComponent<AudioSource>();
+
+        string basePath = "Assets/Audio Assets/SFX/Character/Weapons/";
+        string name = "BAS_imp_";
+        string extension = ".wav";
+
+        string path = null;
+
+        string weaponType = null;
+        string dirtMaterial = "dirt";
+        string grassMaterial = "grass";
+        string leavesMaterial = "leaves";
+        string stoneMaterial = "stone";
+        string woodMaterial = "wood";
+
+        /// Axe
+        weaponType = "axe_";
+
+        path = basePath + name + weaponType + dirtMaterial + extension;
+        impAxeDirtSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + grassMaterial + extension;
+        impAxeGrassSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + leavesMaterial + "_2" + extension;
+        impAxeLeavesSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + stoneMaterial + "_2" + extension;
+        impAxeStoneSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+
+        /// Dagger
+        weaponType = "dagger_";
+
+        path = basePath + name + weaponType + dirtMaterial + extension;
+        impDaggerDirtSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + grassMaterial + "_2" + extension;
+        impDaggerGrassSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + leavesMaterial + extension;
+        impDaggerLeavesSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + stoneMaterial + "_2" + extension;
+        impDaggerStoneSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + woodMaterial + extension;
+        impDaggerWoodSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+
+        /// Sword
+        weaponType = "sword_";
+
+        path = basePath + name + weaponType + dirtMaterial + extension;
+        impSwordDirtSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + grassMaterial + extension;
+        impSwordGrassSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + leavesMaterial + extension;
+        impSwordLeavesSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + stoneMaterial + "_2" + extension;
+        impSwordStoneSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+        path = basePath + name + weaponType + woodMaterial + "_2" + extension;
+        impSwordWoodSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+    }
+
     void Start()
     {
         prefab = gameObject;
@@ -107,9 +189,6 @@ public class Weapon : MonoBehaviour, IInteractable
         {
             Physics.IgnoreCollision(hitbox, PlayerManager.Instance.playerCollider);
         }
-
-        // Sandra
-        //combo1Sound = Resources.Load("Audio Assets/SFX/Character/Weapons")
     }
 
     public void EquipWeapon()
@@ -232,7 +311,11 @@ public class Weapon : MonoBehaviour, IInteractable
                 Attack attack = new Attack(BaseDamage, col.contacts[0].point - PlayerManager.Instance.player.transform.position, BaseDamage);
                 GameManager.DamageObject(col.gameObject, attack);
                 // HINT: Play weapon impact event here, weapon type = transform.parent.gameObject
-                
+
+                // Sandra
+                SoundMaterial soundMaterial = col.gameObject.GetComponent<SoundMaterial>();
+                if (soundMaterial != null)
+                    PlayWeaponImpact(soundMaterial.soundMaterialType);
             }
         }
     }
@@ -241,6 +324,88 @@ public class Weapon : MonoBehaviour, IInteractable
         alreadyHitObjects.Add(HitObj);
         // HINT: Play weapon impact event here, weapon type = transform.parent.gameObject
 
+        // Sandra
+        SoundMaterial soundMaterial = HitObj.GetComponent<SoundMaterial>();
+        if (soundMaterial != null)
+            PlayWeaponImpact(soundMaterial.soundMaterialType);
     }
 
+    // Sandra
+    private void PlayWeaponImpact(SoundMaterial.SoundMaterialType soundMaterialType)
+    {
+        switch (weaponType)
+        {
+            case WeaponTypes.Dagger:
+
+                switch (soundMaterialType)
+                {
+                    case SoundMaterial.SoundMaterialType.dirt:
+                        audioSource.PlayOneShot(impDaggerDirtSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.grass:
+                        audioSource.PlayOneShot(impDaggerGrassSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.leaves:
+                        audioSource.PlayOneShot(impDaggerLeavesSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.stone:
+                        audioSource.PlayOneShot(impDaggerStoneSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.wood:
+                        audioSource.PlayOneShot(impDaggerWoodSound);
+                        break;
+                }
+
+                break;
+
+            case WeaponTypes.Sword:
+
+                switch (soundMaterialType)
+                {
+                    case SoundMaterial.SoundMaterialType.dirt:
+                        audioSource.PlayOneShot(impSwordDirtSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.grass:
+                        audioSource.PlayOneShot(impSwordGrassSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.leaves:
+                        audioSource.PlayOneShot(impSwordLeavesSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.stone:
+                        audioSource.PlayOneShot(impSwordStoneSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.wood:
+                        audioSource.PlayOneShot(impSwordWoodSound);
+                        break;
+                }
+
+                break;
+
+            case WeaponTypes.Axe:
+
+                switch (soundMaterialType)
+                {
+                    case SoundMaterial.SoundMaterialType.dirt:
+                        audioSource.PlayOneShot(impAxeDirtSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.grass:
+                        audioSource.PlayOneShot(impAxeGrassSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.leaves:
+                        audioSource.PlayOneShot(impAxeLeavesSound);
+                        break;
+                    case SoundMaterial.SoundMaterialType.stone:
+                        audioSource.PlayOneShot(impAxeStoneSound);
+                        break;
+                }
+
+                break;
+
+            case WeaponTypes.PickAxe:
+                break;
+
+            case WeaponTypes.Hammer:
+                break;         
+        }
+    }
 }

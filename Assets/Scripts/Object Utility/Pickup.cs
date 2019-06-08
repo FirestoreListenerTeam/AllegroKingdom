@@ -315,6 +315,8 @@ public class Pickup : MonoBehaviour, IInteractable
 			if (interactionSound)
 			{
                 // HINT: Play the sound for this pickup
+
+                // Sandra
                 switch (pickupType)
                 {
                     case PickupType.Book:
