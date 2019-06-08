@@ -13,6 +13,10 @@ using UnityEngine.EventSystems;
 
 public class Inventory : MonoBehaviour
 {
+    public AudioSource fx_source;
+    public AudioClip open_inventory;
+    public AudioClip close_inventory;
+
     public Canvas ThisCanvas;
     public CanvasGroup canvasGroup;
 
@@ -559,6 +563,8 @@ public class Inventory : MonoBehaviour
     {
         if (!hasShown)
         {
+            // ggg
+            fx_source.PlayOneShot(open_inventory);
             InputManager.OnUpArrowDown += OnArrowUp;
             InputManager.OnDownArrowDown += OnArrowDown;
             PlayerManager.Instance.cameraScript.FreezeAndShowCursor(true, gameObject);
@@ -657,6 +663,7 @@ public class Inventory : MonoBehaviour
     {
         if (hasShown)
         {
+            fx_source.PlayOneShot(close_inventory);
             InputManager.OnUpArrowDown -= OnArrowUp;
             InputManager.OnDownArrowDown -= OnArrowDown;
             PlayerManager.Instance.cameraScript.FreezeAndShowCursor(false, gameObject);
