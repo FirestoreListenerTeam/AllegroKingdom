@@ -14,6 +14,10 @@ public class QuestUpdatedVisuals : MonoBehaviour
 {
     public float ShowDuration = 6f;
 
+    public AudioSource fx_source;
+    public AudioClip open_quest;
+    public AudioClip close_quest;
+
     #region private variables
     [SerializeField]
     private QuestGiver questGiver;
@@ -64,6 +68,7 @@ public class QuestUpdatedVisuals : MonoBehaviour
     {
         if (!isShowing)
         {
+            fx_source.PlayOneShot(open_quest);
             questUpdatedAnimator.SetTrigger(showTrigger);
             isShowing = true;
         }
@@ -73,6 +78,7 @@ public class QuestUpdatedVisuals : MonoBehaviour
     {
         if (isShowing)
         {
+            fx_source.PlayOneShot(close_quest);
             questUpdatedAnimator.SetTrigger(hideTrigger);
             isShowing = false;
         }
