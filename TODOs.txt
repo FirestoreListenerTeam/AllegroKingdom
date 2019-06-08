@@ -18,3 +18,15 @@ Guillermo done:
 	- Inventory
 	- Quest
 	- Event functions
+
+Sandra done:
+2.1.1: add most main character sounds:
+	- Footsteps
+	- Attack with selected weapon
+	- Pick items
+// NOTE: I didn't find any sounds for casting spells...
+- Assign every sound material in the scene.
+2.1.2: randomize footstep sounds
+2.1.3: take floor surface into account in footstep sounds
+2.2: add Evil Head sounds
+2.3: add Evil Plant sounds
