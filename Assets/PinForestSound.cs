@@ -19,7 +19,7 @@ public class PinForestSound : MonoBehaviour
     {
         if (audioSource)
         {
-            Debug.Log(GameManager.TimeOfDay);
+            //Debug.Log(GameManager.TimeOfDay);
 
             if (GameManager.TimeOfDay >= 6.0f && GameManager.TimeOfDay <= 18.0f &&
                 audioSource.clip != clipList[0])

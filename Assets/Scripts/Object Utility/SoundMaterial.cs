@@ -12,6 +12,17 @@ public class SoundMaterial : MonoBehaviour
     // HINT: You can identify your material here, so you can play the appropiate footstep sound
 
     // Sandra
-    public enum SoundMaterialType { none, dirt, grass, leaves, rubble, sand, stone, wood, water };
-    public SoundMaterialType soundMaterialType = SoundMaterialType.none;
+    public enum SoundMaterialType
+    {
+        none = 0,
+        dirt = 1,
+        grass = 2,
+        leaves = 3,
+        rubble = 4,
+        sand = 5,
+        stone = 6,
+        wood = 7,
+        water = 8
+    };
+    public int material = 0;
 }
