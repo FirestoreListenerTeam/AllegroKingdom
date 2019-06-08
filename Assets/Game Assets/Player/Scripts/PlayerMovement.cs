@@ -17,6 +17,10 @@ public class PlayerMovement : MonoBehaviour
     public float navMeshCheckDistance = 0.5f;
     public float speedWhileAttacking = 0.8f;
 
+    // Sandra
+    [HideInInspector]
+    public float movementSpeed = 0.0f;
+
     [Header("Physics Materials")]
     public PhysicMaterial frictionPhysMat;
     public PhysicMaterial noFrictionPhysMat;
@@ -54,6 +58,9 @@ public class PlayerMovement : MonoBehaviour
     private readonly int isMovingHash = Animator.StringToHash("isMoving");
     private readonly int inAirHash = Animator.StringToHash("inAir");
     private readonly int movementSpeedHash = Animator.StringToHash("movementSpeed");
+
+    // Sandra
+    public AdventuressAnimationEventHandler.FootSide footSide = AdventuressAnimationEventHandler.FootSide.left;
     #endregion
 
     void Start()
@@ -94,7 +101,8 @@ public class PlayerMovement : MonoBehaviour
 
         //Ground checks
         if (Physics.SphereCastNonAlloc(new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), 0.06f, -transform.up, groundCheckHits, 0.5f, groundCheckMask) > 0)
-        { //We hit something
+        { 
+            //We hit something
             PlayerManager.Instance.inAir = false;
             animator.SetBool(inAirHash, false);
 
@@ -107,6 +115,22 @@ public class PlayerMovement : MonoBehaviour
                 //TODO: Play landing sound here!
                 PlayerManager.Instance.playerCollider.material = frictionPhysMat;
                 firstTimeLand = false;
+
+                // Sandra
+                GameObject playerGameObject = PlayerManager.Instance.player;
+                if (playerGameObject != null)
+                {
+                    AdventuressAnimationEventHandler eventHandler = playerGameObject.GetComponent<AdventuressAnimationEventHandler>();
+                    if (eventHandler != null)
+                    {
+                        if (footSide == AdventuressAnimationEventHandler.FootSide.left)
+                            footSide = AdventuressAnimationEventHandler.FootSide.right;
+                        else
+                            footSide = AdventuressAnimationEventHandler.FootSide.left;
+
+                        eventHandler.TakeFootstep(footSide);
+                    }
+                }
             }
         }
         else
@@ -151,6 +175,9 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat(movementSpeedHash, runAmount);
         float RTPCValue = runAmount * 100f;
         // HINT: You might need that RTPC value to control the player's movement sounds
+
+        // Sandra
+        movementSpeed = RTPCValue;
     }
 
     void Sprint()

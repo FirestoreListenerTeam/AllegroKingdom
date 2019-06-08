@@ -4715,6 +4715,7 @@ MonoBehaviour:
   InteractionEnabled: 1
   interactionSound: 1
   trigger: {fileID: 0}
+  pickupType: 12
   OnBecameFocus:
     m_PersistentCalls:
       m_Calls:

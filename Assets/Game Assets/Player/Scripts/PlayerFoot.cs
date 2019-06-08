@@ -19,32 +19,31 @@ public class PlayerFoot : MonoBehaviour
     // Sandra
     private const uint numAudios = 6;
 
-    /// DIRT
+    /// Dirt
     private AudioClip[] dirtRunSound;
     private AudioClip[] dirtWalkSound;
 
-    /// GRASS
+    /// Grass
     private AudioClip[] grassRunSound;
     private AudioClip[] grassWalkSound;
 
-    /// RUBBLE
+    /// Rubble
     private AudioClip[] rubbleRunSound;
-    //private AudioClip rubbleWalk1Sound; does not exist
     private AudioClip[] rubbleWalkSound;
 
-    /// SAND
+    /// Sand
     private AudioClip[] sandRunSound;
     private AudioClip[] sandWalkSound;
 
-    /// STONE
+    /// Stone
     private AudioClip[] stoneRunSound;
     private AudioClip[] stoneWalkSound;
 
-    /// WATER
+    /// Water
     private AudioClip[] waterRunSound;
     private AudioClip[] waterWalkSound;
 
-    /// WOOD
+    /// Wood
     private AudioClip[] woodRunSound;
     private AudioClip[] woodWalkSound;
     #endregion
@@ -60,161 +59,193 @@ public class PlayerFoot : MonoBehaviour
         string movement = null;
         string number = "0";
 
-        /// DIRT
+        /// Dirt
         terrain = "dirt_";
         dirtRunSound = new AudioClip[numAudios];
         movement = "run_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             dirtRunSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
         dirtWalkSound = new AudioClip[numAudios];
         movement = "walk_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             dirtWalkSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
 
-        /// GRASS
+        /// Grass
         terrain = "grass_";
         grassRunSound = new AudioClip[numAudios];
         movement = "run_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             grassRunSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
         grassWalkSound = new AudioClip[numAudios];
         movement = "walk_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             grassWalkSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
 
-        /// RUBBLE
+        /// Rubble
         terrain = "rubble_";
         rubbleRunSound = new AudioClip[numAudios];
         movement = "run_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             rubbleRunSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
-        rubbleWalkSound = new AudioClip[numAudios];
+        rubbleWalkSound = new AudioClip[numAudios - 1];
         movement = "walk_";
-        for (uint i = 0; i < numAudios; ++i)
+        for (uint i = 0; i < numAudios - 1; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 2) + extension;
             rubbleWalkSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
 
-        /// SAND
+        /// Sand
         terrain = "sand_";
         sandRunSound = new AudioClip[numAudios];
         movement = "run_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             sandRunSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
         sandWalkSound = new AudioClip[numAudios];
         movement = "walk_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             sandWalkSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
 
-        /// STONE
+        /// Stone
         terrain = "stone_";
         stoneRunSound = new AudioClip[numAudios];
         movement = "run_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             stoneRunSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
         stoneWalkSound = new AudioClip[numAudios];
         movement = "walk_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             stoneWalkSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
 
-        /// WATER
+        /// Water
         terrain = "water_";
         waterRunSound = new AudioClip[numAudios];
         movement = "run_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             waterRunSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
         waterWalkSound = new AudioClip[numAudios];
         movement = "walk_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             waterWalkSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
 
-        /// WOOD
+        /// Wood
         terrain = "wood_";
         woodRunSound = new AudioClip[numAudios];
         movement = "run_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             woodRunSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
         woodWalkSound = new AudioClip[numAudios];
         movement = "walk_";
         for (uint i = 0; i < numAudios; ++i)
         {
-            string path = basePath + name + terrain + movement + number + i + extension;
+            string path = basePath + name + terrain + movement + number + (i + 1) + extension;
             woodWalkSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         }
     }
 
-    public void PlayFootstepSound()
+    public AudioClip PlayFootstepSound()
     {
+        bool isSprinting = PlayerManager.Instance.isSprinting;
+
         if (!inWater)
         {
             materialChecker.CheckMaterial(gameObject); //This also sets the material if a SoundMaterial is found!
         }
+        else
+        {
+            // Sandra
+            int randomNumber = Random.Range(0, (int)numAudios);
+            return isSprinting ? waterRunSound[randomNumber] : waterWalkSound[randomNumber];
+        }
 
         // HINT: Play footstep sound here
+
+        // Sandra
         SoundMaterial.SoundMaterialType materialType = (SoundMaterial.SoundMaterialType)materialChecker.GetMaterial();
         switch (materialType)
         {
             case SoundMaterial.SoundMaterialType.dirt:
-
-                break;
+                {
+                    int randomNumber = Random.Range(0, (int)numAudios);
+                    return isSprinting ? dirtRunSound[randomNumber] : dirtWalkSound[randomNumber];
+                }
 
             case SoundMaterial.SoundMaterialType.grass:
-
-                break;
+                {
+                    int randomNumber = Random.Range(0, (int)numAudios);
+                    return isSprinting ? grassRunSound[randomNumber] : grassWalkSound[randomNumber];
+                }
 
             case SoundMaterial.SoundMaterialType.rubble:
-
-                break;
+                {
+                    if (isSprinting)
+                    {
+                        int randomNumber = Random.Range(0, (int)numAudios);
+                        return rubbleRunSound[randomNumber];
+                    }
+                    else
+                    {
+                        int randomNumber = Random.Range(0, (int)numAudios - 1);
+                        return rubbleWalkSound[randomNumber];
+                    }
+                }
 
             case SoundMaterial.SoundMaterialType.sand:
-
-                break;
+                {
+                    int randomNumber = Random.Range(0, (int)numAudios);
+                    return isSprinting ? sandRunSound[randomNumber] : sandWalkSound[randomNumber];
+                }
 
             case SoundMaterial.SoundMaterialType.stone:
-
-                break;
+                {
+                    int randomNumber = Random.Range(0, (int)numAudios);
+                    return isSprinting ? stoneRunSound[randomNumber] : stoneWalkSound[randomNumber];
+                }
 
             case SoundMaterial.SoundMaterialType.wood:
-
-                break;
+                {
+                    int randomNumber = Random.Range(0, (int)numAudios);
+                    return isSprinting ? woodRunSound[randomNumber] : woodWalkSound[randomNumber];
+                }
         }
+
+        return null;
     }
 
     public void EnterWaterZone()
@@ -226,5 +257,4 @@ public class PlayerFoot : MonoBehaviour
     {
         inWater = false;
     }
-
 }

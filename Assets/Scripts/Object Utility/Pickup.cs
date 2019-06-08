@@ -41,7 +41,8 @@ public class Pickup : MonoBehaviour, IInteractable
         Dagger,
         Hammer,
         Pickaxe,
-        Sword
+        Sword,
+        Coin
     }
     public PickupType pickupType;
 
@@ -70,6 +71,7 @@ public class Pickup : MonoBehaviour, IInteractable
     private AudioClip pickupHammerSound;
     private AudioClip pickupPickaxeSound;
     private AudioClip pickupSwordSound;
+    private AudioClip[] pickupCoinSounds;
     #endregion
 
     //Events
@@ -163,6 +165,16 @@ public class Pickup : MonoBehaviour, IInteractable
         pickupSwordSound = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
         if (pickupSwordSound == null)
             Debug.LogError("Invalid audio clip path: " + path);
+
+        /// Coin
+        pickupCoinSounds = new AudioClip[numAudios + 1];
+        for (uint i = 0; i < numAudios + 1; ++i)
+        {
+            path = basePath + name + "Coin" + number + (i + 1) + extension;
+            pickupCoinSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (pickupCoinSounds[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+        }
     }
 
     void Start()
@@ -173,7 +185,6 @@ public class Pickup : MonoBehaviour, IInteractable
 	void OnEnable()
 	{
         // HINT: Good place to save the pickup type
-        // Done in the Inspector
 
         if (transform.childCount > 0)
 		{
@@ -324,8 +335,10 @@ public class Pickup : MonoBehaviour, IInteractable
                         break;
 
                     case PickupType.Crystals:
-                        int randomNumber = Random.Range(0, (int)numAudios);
-                        audioSource.PlayOneShot(pickupCrystalsSounds[randomNumber]);
+                        {
+                            int randomNumber = Random.Range(0, (int)numAudios);
+                            audioSource.PlayOneShot(pickupCrystalsSounds[randomNumber]);
+                        }
                         break;
 
                     case PickupType.EvilEssence:
@@ -362,6 +375,13 @@ public class Pickup : MonoBehaviour, IInteractable
 
                     case PickupType.Sword:
                         audioSource.PlayOneShot(pickupSwordSound);
+                        break;
+
+                    case PickupType.Coin:
+                        {
+                            int randomNumber = Random.Range(0, (int)numAudios);
+                            audioSource.PlayOneShot(pickupCoinSounds[randomNumber]);
+                        }
                         break;
 
                     case PickupType.Generic:
