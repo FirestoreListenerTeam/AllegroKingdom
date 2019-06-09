@@ -513,7 +513,6 @@ public class AdventuressAnimationEventHandler : MonoBehaviour
                     break;
 
                 case Pickup.PickupType.Generic:
-                default:
                     playerAudioSource.PlayOneShot(pickupGenericSound);
                     break;
             }

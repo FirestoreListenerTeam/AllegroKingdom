@@ -201,11 +201,11 @@ public class Pickup : MonoBehaviour, IInteractable
 
 	public void OnInteract()
 	{
-		if (InteractionEnabled && this.enabled)
-		{
+        //if (InteractionEnabled && this.enabled)
+        {
 			OnInteraction.Invoke();
 
-			if (interactionSound)
+            if (interactionSound)
 			{
                 // HINT: Play the sound for this pickup
 
