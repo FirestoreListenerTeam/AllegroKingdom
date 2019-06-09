@@ -134,6 +134,8 @@ public class EvilHeadAI : Creature
     public override void Start(){
 		base.Start();
         // HINT: Hover sound start here
+
+        // Sandra
         audioSource.clip = hoverLPSound;
         audioSource.Play();
     }
@@ -168,7 +170,11 @@ public class EvilHeadAI : Creature
         StartCoroutine(RotateTowardsTarget(targetLocation, 1f));
 
         // HINT: The head is sending a telegraph attack, this might need a sound effect
+
+        // Sandra
         audioSource.PlayOneShot(chargeSound);
+        int randomNumber = Random.Range(0, (int)numAudios);
+        audioSource.PlayOneShot(chargeSounds[randomNumber]);     
     }
 
 
@@ -209,6 +215,8 @@ public class EvilHeadAI : Creature
     {
         //print(Time.realtimeSinceStartup + ": ChargeTowardsPlayer");
         // HINT: Charge started, a telegrpah sound could be useful here
+
+        // Sandra
         audioSource.PlayOneShot(chargeBiteSound);
 
         Vector3 currentPosition = transform.position;
@@ -256,6 +264,8 @@ public class EvilHeadAI : Creature
         SetMovementSpeed(0f);
         //print(Time.realtimeSinceStartup + ": Explode");
         // HiNT: We should stop hover sound at this point
+
+        // Sandra
         audioSource.Stop();
 
         GameObject fx = (GameObject)Instantiate(deathFX, transform.position, Quaternion.identity);
@@ -276,12 +286,38 @@ public class EvilHeadAI : Creature
         Destroy(gameObject);
     }
 
+    // Sandra
+    public override void OnDamageReset()
+    {
+        base.OnDamageReset();
+
+        int randomNumber = Random.Range(0, (int)numAudios);
+        audioSource.PlayOneShot(hurtSounds[randomNumber]);
+    }
+
+    // Sandra
+    protected override void PlayCreatureDeathSound()
+    {
+        base.PlayCreatureDeathSound();
+
+        AudioSource playerAudioSource = PlayerManager.Instance.playerAudioSource;
+        if (playerAudioSource != null)
+        {
+            int randomNumber = Random.Range(0, (int)numAudios);
+            playerAudioSource.PlayOneShot(deathSounds[randomNumber]);
+            randomNumber = Random.Range(0, (int)numAudios);
+            playerAudioSource.PlayOneShot(deathVoxSounds[randomNumber]);
+        }
+    }
+
     /// <summary>
     /// Called from Animation Event. Initiates the charging towards the player!
     /// </summary>
     public void PlayBiteSound()
     {
         // HINT: Looks like a good place to play the bite sound
+
+        // Sandra
         int randomNumber = Random.Range(0, (int)numAudios);
         audioSource.PlayOneShot(biteSounds[randomNumber]);
     }

@@ -28,11 +28,12 @@ public class EvilSpitPlantAI : Creature
 
     private const uint numAudios = 3;
 
-    private AudioClip[] chargeSound;
-    private AudioClip[] deathSound;
-    private AudioClip[] deathHeadfallSound;
-    private AudioClip[] hurtSound;
-    private AudioClip[] shootSound;
+    private AudioClip[] chargeSounds;
+    private AudioClip[] deathSounds;
+    private AudioClip[] deathHeadfallSounds;
+    private AudioClip[] hurtSounds;
+    private AudioClip[] hurt2Sounds;
+    private AudioClip[] shootSounds;
     #endregion
 
     private void Awake()
@@ -48,53 +49,59 @@ public class EvilSpitPlantAI : Creature
         string type = null;
         string path = null;
 
-        chargeSound = new AudioClip[numAudios];
+        chargeSounds = new AudioClip[numAudios];
         type = "Charge";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            chargeSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (chargeSound[i] == null)
+            chargeSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (chargeSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
-        deathSound = new AudioClip[numAudios];
+        deathSounds = new AudioClip[numAudios];
         type = "Death";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 4) + extension;
-            deathSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (deathSound[i] == null)
+            deathSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (deathSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
-        deathHeadfallSound = new AudioClip[numAudios];
+        deathHeadfallSounds = new AudioClip[numAudios];
         type = "Death_Headfall";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            deathHeadfallSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (deathHeadfallSound[i] == null)
+            deathHeadfallSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (deathHeadfallSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
-        hurtSound = new AudioClip[numAudios * 2];
+        hurtSounds = new AudioClip[numAudios];
+        hurt2Sounds = new AudioClip[numAudios];
         type = "Hurt";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            hurtSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (hurtSound[i] == null)
+            hurtSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (hurtSounds[i] == null)
+                Debug.LogError("Invalid audio clip path: " + path);
+
+            path = basePath + name + type + number + (i + 4) + extension;
+            hurt2Sounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (hurt2Sounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
 
-        shootSound = new AudioClip[numAudios];
+        shootSounds = new AudioClip[numAudios];
         type = "Shoot";
         for (uint i = 0; i < numAudios; ++i)
         {
             path = basePath + name + type + number + (i + 1) + extension;
-            shootSound[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            if (shootSound[i] == null)
+            shootSounds[i] = (AudioClip)AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            if (shootSounds[i] == null)
                 Debug.LogError("Invalid audio clip path: " + path);
         }
     }
@@ -129,8 +136,10 @@ public class EvilSpitPlantAI : Creature
         if (targetOfNPC != null && !GameManager.Instance.AIPaused)
         {
             // HINT: Plant will launch a bullet, time to play the spit sound here
+
+            // Sandra
             int randomNumber = Random.Range(0, (int)numAudios);
-            audioSource.PlayOneShot(shootSound[randomNumber]);
+            audioSource.PlayOneShot(shootSounds[randomNumber]);
 
             GameObject bullet = Instantiate(bulletPrefab, spitBulletSpawnPoint.transform.position, Quaternion.LookRotation(transform.forward)) as GameObject; //TODO: Pool spitbullets
             bullet.GetComponent<EvilSpitPlantProjectile>().parent = gameObject;
@@ -144,8 +153,10 @@ public class EvilSpitPlantAI : Creature
     public void PlayChargeSound()
     {
         // HINT: Plant is charging a bullet, time to play the spit charging sound here
+
+        // Sandra
         int randomNumber = Random.Range(0, (int)numAudios);
-        audioSource.PlayOneShot(chargeSound[randomNumber]);
+        audioSource.PlayOneShot(chargeSounds[randomNumber]);
     }
 
     /// <summary>
@@ -173,6 +184,25 @@ public class EvilSpitPlantAI : Creature
     {
         base.OnDamageReset();
         lockRotation = false;
+
+        // Sandra
+        int randomNumber = Random.Range(0, (int)numAudios);
+        audioSource.PlayOneShot(hurtSounds[randomNumber]);
+        randomNumber = Random.Range(0, (int)numAudios);
+        audioSource.PlayOneShot(hurt2Sounds[randomNumber]);
+    }
+
+    // Sandra
+    protected override void PlayCreatureDeathSound()
+    {
+        base.PlayCreatureDeathSound();
+
+        AudioSource playerAudioSource = PlayerManager.Instance.playerAudioSource;
+        if (playerAudioSource != null)
+        {
+            int randomNumber = Random.Range(0, (int)numAudios);
+            playerAudioSource.PlayOneShot(deathSounds[randomNumber]);
+        }
     }
 
     /// <summary>
@@ -212,7 +242,13 @@ public class EvilSpitPlantAI : Creature
     public void OnDeathHeadFall()
     {
         // HINT: Plant is dead, you might want to play the death head fall sound here
-        int randomNumber = Random.Range(0, (int)numAudios);
-        audioSource.PlayOneShot(deathHeadfallSound[randomNumber]);
+
+        // Sandra
+        AudioSource playerAudioSource = PlayerManager.Instance.playerAudioSource;
+        if (playerAudioSource != null)
+        {
+            int randomNumber = Random.Range(0, (int)numAudios);
+            audioSource.PlayOneShot(deathHeadfallSounds[randomNumber]);
+        }
     }
 }
